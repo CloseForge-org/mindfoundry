@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HotelSim Control Room</title>
+  <style>
+    :root { --bg:#08111f; --panel:#101b2d; --panel2:#13243b; --text:#eef5ff; --muted:#9db0c8; --gold:#f2c86b; --red:#ff6b6b; --green:#59d98e; --blue:#6ca8ff; --line:#263852; }
+    *{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at top left,#18365c 0,#08111f 38%,#050912 100%);color:var(--text);font:14px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    header{padding:28px 32px 18px;border-bottom:1px solid var(--line);display:flex;align-items:flex-end;justify-content:space-between;gap:24px}
+    h1{margin:0;font-size:32px;letter-spacing:-.04em}.subtitle{color:var(--muted);margin-top:6px}.pill{border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--muted);background:rgba(255,255,255,.03)}
+    main{padding:24px 32px 40px;display:grid;grid-template-columns:1.4fr .9fr;gap:20px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 18px 40px rgba(0,0,0,.18)}
+    .metric .label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em}.metric .value{font-size:30px;font-weight:760;margin-top:8px}.metric .note{color:var(--muted);font-size:12px}.span4{grid-column:span 4}.span2{grid-column:span 2} h2{font-size:16px;margin:0 0 14px}.row{display:grid;grid-template-columns:90px 1fr 90px 72px;gap:12px;align-items:center;border-top:1px solid rgba(255,255,255,.07);padding:11px 0}.row:first-of-type{border-top:0}.tag{display:inline-flex;align-items:center;width:max-content;border-radius:999px;padding:3px 8px;font-size:12px;background:#1d304c;color:#bfd6ff}.urgent{background:rgba(255,107,107,.16);color:#ffb5b5}.high{background:rgba(242,200,107,.17);color:#ffe0a0}.sensitive{color:var(--red);font-weight:700}.ok{color:var(--green)}.muted{color:var(--muted)}
+    .staff{display:grid;grid-template-columns:1fr 1fr;gap:10px}.person{padding:12px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07)}.person b{display:block}.person small{color:var(--muted)}
+    .policies{display:flex;gap:8px;flex-wrap:wrap}.policy{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:12px;padding:8px 10px;cursor:pointer}.policy:hover{border-color:var(--gold)} pre{white-space:pre-wrap;color:#dce8f8;background:rgba(0,0,0,.18);border-radius:12px;padding:12px;max-height:240px;overflow:auto}.error{border-color:rgba(255,107,107,.45);background:rgba(255,107,107,.08)}
+    .querybar{display:flex;gap:10px;margin-bottom:12px}.querybar input{flex:1;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.18);color:var(--text);padding:10px 12px}.querybar button{border:1px solid var(--gold);border-radius:12px;background:rgba(242,200,107,.14);color:var(--text);padding:10px 14px;cursor:pointer}.route{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px}.cite{border-top:1px solid rgba(255,255,255,.07);padding:10px 0}.cite b{color:#fff}.cite small{color:var(--muted)}
+    @media(max-width:1100px){main{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.span4,.span2{grid-column:span 2}} @media(max-width:680px){header{display:block}.grid{grid-template-columns:1fr}.span4,.span2{grid-column:span 1}.row{grid-template-columns:1fr}.staff{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <div><h1>HotelSim Control Room</h1><div class="subtitle">Simulation-grade fake hotel ops dashboard · SQLite + local API + policy docs</div></div>
+    <div class="pill" id="health">Checking API…</div>
+  </header>
+  <main>
+    <section class="grid">
+      <div class="card metric"><div class="label">Rooms</div><div class="value" id="rooms">—</div><div class="note">250-room fictional hotel</div></div>
+      <div class="card metric"><div class="label">Bookers</div><div class="value" id="bookers">—</div><div class="note">synthetic PII only</div></div>
+      <div class="card metric"><div class="label">Reservations</div><div class="value" id="reservations">—</div><div class="note">repeat-stay distribution</div></div>
+      <div class="card metric"><div class="label">Open Incidents</div><div class="value" id="openIncidents">—</div><div class="note">real-time queue</div></div>
+      <div class="card span4"><h2>Live Incident Queue</h2><div id="incidents" class="muted">Loading…</div></div>
+      <div class="card span4"><h2>Replicant RAG Agent</h2><div class="querybar"><input id="ragInput" value="How should we handle a late checkout request from a VIP guest?" /><button onclick="askRag()">Ask</button></div><div id="ragResult" class="muted">Loading replicant summary…</div></div>
+      <div class="card span2"><h2>Privacy / Hallucination Guardrails</h2><div id="guardrails"></div></div>
+      <div class="card span2"><h2>Policy Retrieval</h2><div class="policies" id="policies"></div><pre id="policyText">Select a policy.</pre></div>
+    </section>
+    <aside class="card"><h2>Fake Hotel Management Team</h2><div class="staff" id="staff">Loading…</div></aside>
+  </main>
+<script>
+const $ = id => document.getElementById(id);
+const api = p => fetch(p).then(r => { if(!r.ok) throw new Error(`${r.status} ${r.statusText}`); return r.json(); });
+const fmt = n => Number(n).toLocaleString();
+function severityClass(s){return s==='urgent'?'urgent':s==='high'?'high':''}
+async function load(){
+  try{
+    const [health, summary, incidents, staff, policies, reps] = await Promise.all([api('/health'), api('/dashboard/summary'), api('/incidents/open?limit=12'), api('/staff'), api('/policies'), api('/replicants/summary')]);
+    $('health').innerHTML = health.ok ? '<span class="ok">● API live</span> · 127.0.0.1:8765' : 'API issue';
+    $('rooms').textContent=fmt(summary.rooms); $('bookers').textContent=fmt(summary.bookers); $('reservations').textContent=fmt(summary.reservations); $('openIncidents').textContent=fmt(summary.open_incidents);
+    $('incidents').innerHTML = incidents.map(i => `<div class="row"><span class="tag ${severityClass(i.severity)}">${i.severity}</span><div><b>${i.type.replace('_',' ')}</b><div class="muted">${i.guest_visible_summary}</div></div><span>${i.room_id}</span><span class="${i.contains_sensitive?'sensitive':'muted'}">${i.contains_sensitive?'PII':'clean'}</span></div>`).join('');
+    $('staff').innerHTML = staff.map(s => `<div class="person"><b>${s.name}</b><small>${s.zh_name} · ${s.role}<br>${s.shift_start}–${s.shift_end} · clearance: ${s.clearance}</small></div>`).join('');
+    $('guardrails').innerHTML = `<p><b>${summary.sensitive_incidents}</b> sensitive incidents seeded for leakage tests.</p><p><b>${summary.zh_messages}</b> Traditional Chinese messages and <b>${summary.en_messages}</b> English messages.</p><p class="muted">Agent should retrieve policy before promising refunds or revealing guest/payment data.</p>`;
+    $('policies').innerHTML = policies.map(p => `<button class="policy" onclick="showPolicy('${p}')">${p}</button>`).join('');
+    $('ragResult').innerHTML = `<p><b>${reps.replicants}</b> staff replicants · <b>${reps.memories}</b> structured memories · Workspace provisioned: <b>${reps.workspace.provisioned ? 'yes' : 'no'}</b></p><p class="muted">Try asking a routing/privacy/policy question.</p>`;
+  } catch(e){ $('health').textContent='API offline'; $('health').classList.add('error'); $('incidents').innerHTML=`<div class="error card">${e.message}</div>`; }
+}
+async function showPolicy(name){ const p=await api('/policies/'+name); $('policyText').textContent=p.content; }
+async function askRag(){
+  const q=$('ragInput').value.trim(); if(!q) return;
+  $('ragResult').textContent='Thinking through replicant memory + policies…';
+  const r=await api('/rag/query?q='+encodeURIComponent(q));
+  $('ragResult').innerHTML = `<div><b>Detected:</b> ${r.detected_intents.join(', ')}</div><div class="route">${r.recommended_route.map(x=>`<span class="tag">${x.person || '—'} · ${x.role}</span>`).join('')}</div><p>${r.guardrail}</p><p class="muted">${r.draft_next_step}</p><h2>Citations</h2>${r.citations.map(c=>`<div class="cite"><b>${c.person || c.role}</b> <small>${c.source} · ${c.kind} · score ${c.score}</small><br>${c.text}</div>`).join('')}`;
+}
+load(); setInterval(load, 15000);
+</script>
+</body>
+</html>

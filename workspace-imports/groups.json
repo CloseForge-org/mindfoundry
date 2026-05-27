@@ -1,0 +1,31 @@
+{
+  "managers@snapdesign.tw": [
+    "maya.chen@snapdesign.tw",
+    "leo.wang@snapdesign.tw",
+    "nina.lin@snapdesign.tw",
+    "grace.liu@snapdesign.tw",
+    "ben.wu@snapdesign.tw",
+    "iris.tsai@snapdesign.tw",
+    "kevin.huang@snapdesign.tw",
+    "annie.chang@snapdesign.tw"
+  ],
+  "frontdesk@snapdesign.tw": [
+    "leo.wang@snapdesign.tw",
+    "nina.lin@snapdesign.tw"
+  ],
+  "housekeeping@snapdesign.tw": [
+    "grace.liu@snapdesign.tw"
+  ],
+  "maintenance@snapdesign.tw": [
+    "ben.wu@snapdesign.tw"
+  ],
+  "reservations@snapdesign.tw": [
+    "iris.tsai@snapdesign.tw"
+  ],
+  "finance@snapdesign.tw": [
+    "annie.chang@snapdesign.tw"
+  ],
+  "guest-experience@snapdesign.tw": [
+    "kevin.huang@snapdesign.tw"
+  ]
+}

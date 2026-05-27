@@ -1,0 +1,120 @@
+# Draft OpenShell/NemoClaw policy for the NeMo Lodge HotelSim agent.
+# Purpose: demonstrate defense-in-depth around a long-running hotel ops/RAG agent.
+# This is a portable policy draft; exact field names may need adjustment to the installed
+# OpenShell/NemoClaw version because the stack is alpha.
+
+name: nemo-lodge-hotelsim-agent
+version: 0.1
+summary: >
+  Allow the HotelSim agent to read only NeMo Lodge simulation files, talk only to
+  Discord, local HotelSim API, and NVIDIA inference, and block exfiltration of
+  credentials/PII by default.
+
+filesystem:
+  default: deny
+  read:
+    - /Users/rogerblee/.openclaw/workspace/projects/hotel-sim/data/**
+    - /Users/rogerblee/.openclaw/workspace/projects/hotel-sim/reports/**
+    - /Users/rogerblee/.openclaw/workspace/projects/hotel-sim/docs/**
+    - /Users/rogerblee/.openclaw/workspace/projects/hotel-sim/hotel_sim/**
+    - /Users/rogerblee/.openclaw/workspace/projects/hotel-sim/scripts/**
+    - /Users/rogerblee/.openclaw/openclaw.json   # Discord bot token; replace with injected secret in production.
+  write:
+    - /Users/rogerblee/.openclaw/workspace/projects/hotel-sim/reports/**
+  deny:
+    - /Users/rogerblee/.openclaw/secure/**
+    - /Users/rogerblee/.ssh/**
+    - /Users/rogerblee/.config/gcloud/**
+    - /Users/rogerblee/.aws/**
+    - /Users/rogerblee/.env
+    - /Users/rogerblee/.openclaw/workspace/.env
+
+network:
+  default: deny
+  allow:
+    - host: 127.0.0.1
+      ports: [8765]
+      methods: [GET]
+      purpose: Local HotelSim API retrieval.
+    - host: discord.com
+      ports: [443]
+      methods: [GET, POST]
+      paths:
+        - /api/v10/channels/*/messages
+      purpose: Read #nemotron-rag and post guarded answers/audit messages.
+    - host: api.discord.com
+      ports: [443]
+      methods: [GET, POST]
+      paths:
+        - /api/v10/channels/*/messages
+      purpose: Discord API alias.
+    - host: integrate.api.nvidia.com
+      ports: [443]
+      methods: [POST]
+      purpose: Nemotron/NVIDIA inference route.
+    - host: api.nvidia.com
+      ports: [443]
+      methods: [POST]
+      purpose: NVIDIA inference route if endpoint differs.
+
+process:
+  default: deny
+  allow:
+    - /usr/bin/python3
+    - /opt/homebrew/bin/python3
+    - /bin/zsh
+  commands:
+    allow:
+      - python3 scripts/nemotron_rag_bridge.py
+      - python3 scripts/seed_discord_incidents.py
+      - python3 hotel_sim/replicants.py
+    deny:
+      - rm
+      - curl
+      - nc
+      - ssh
+      - scp
+      - gcloud
+      - openclaw gateway restart
+
+data_loss_prevention:
+  default_action: redact_and_audit
+  public_outputs:
+    - discord:#nemotron-rag
+    - discord:#agent-audit-log
+    - discord:#front-desk
+    - discord:#housekeeping
+    - discord:#maintenance
+    - discord:#reservations-revenue
+    - discord:#guest-experience
+    - discord:#finance-admin
+    - discord:#manager-escalations
+  classes:
+    password:
+      action: deny
+      patterns: ["password", "passcode", "temporary password", "pwd"]
+    guest_email:
+      action: redact
+      pattern: "email_except_snapdesign_staff"
+    phone:
+      action: redact
+      pattern: "taiwan_phone"
+    payment_card:
+      action: redact
+      pattern: "credit_card_like_13_19_digits"
+    passport_or_id:
+      action: redact
+      patterns: ["passport", "national id", "ARC", "身分證", "護照"]
+    internal_notes:
+      action: redact
+      patterns: ["internal_notes", "private staff note"]
+
+audit:
+  log_file: /Users/rogerblee/.openclaw/workspace/projects/hotel-sim/reports/policy-gate-events.jsonl
+  discord_channel: agent-audit-log
+  include:
+    - policy_denied
+    - redaction
+    - outbound_discord_post
+    - external_network_denied
+    - filesystem_denied

@@ -1,0 +1,24 @@
+**NeMo Lodge live ops summary**
+Tracked Discord-posted incidents: 37
+Recent severity mix: urgent=12
+Privacy-sensitive recent incidents: 4 — summarize only, do not expose private fields.
+
+**Urgent/escalated queue**
+- `INC0478` urgent lost_item room `R144` → Grace Liu / Housekeeping: 退房後我發現東西忘在房間。
+- `INC0289` urgent maintenance room `R122` → Ben Wu / Maintenance: 房間冷氣不冷，現在很熱。
+- `INC0465` urgent billing room `R059` → Leo Wang / Front Desk: 我好像被重複扣款了，請幫我確認。
+- `INC0130` urgent noise room `R007` → Leo Wang / Front Desk: The next room is very loud.
+- `INC0163` urgent front_desk room `R030` → Leo Wang / Front Desk: 我可以提早入住或換房嗎？
+
+**Owner queues**
+- Ben Wu / Maintenance: `INC0289`, `INC0303`
+- Grace Liu / Housekeeping: `INC0478`, `INC0177`
+- Kevin Huang / Guest Experience: `INC0335`
+- Leo Wang / Front Desk: `INC0465`, `INC0130`, `INC0163`, `INC0170`, `INC0299`, `INC0105`
+
+**Recent staff memory signals**
+- Leo Wang (Front Desk Manager): Front desk will triage and confirm the guest-safe next step.
+- Ben Wu (Maintenance Lead): I can check access constraints and estimate repair window. Need room access confirmation before dispatch.
+- Ben Wu (Maintenance Lead): I can check access constraints and estimate repair window. Need room access confirmation before dispatch.
+- Leo Wang (Front Desk Manager): Front desk will triage and confirm the guest-safe next step.
+- Leo Wang (Front Desk Manager): Front desk will triage and confirm the guest-safe next step.

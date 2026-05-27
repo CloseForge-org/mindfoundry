@@ -1,0 +1,15 @@
+# MindFoundry — runtime dependencies
+#
+# Most of the agent runs on stdlib only (urllib, sqlite3, json, dataclasses).
+# These extras are needed for the Google Workspace integration and the
+# optional Discord HTTP helper. The NVIDIA NIM client uses urllib directly.
+
+# Google Workspace (Drive, Docs, Sheets, Calendar, Admin)
+google-api-python-client>=2.130.0
+google-auth>=2.30.0
+google-auth-oauthlib>=1.2.0
+google-auth-httplib2>=0.2.0
+
+# Optional: PyYAML for reading the NemoClaw policy YAML in code paths that
+# parse it (the YAML file is committed; parsing is only needed for tests).
+PyYAML>=6.0
