@@ -23,21 +23,31 @@
   <!-- Section label: AGENT LOOP -->
   <text x="80" y="190" fill="#76b900" font-size="13" font-weight="700" letter-spacing="2">AGENT LOOP</text>
 
-  <!-- (1) Knowledge Gatherer + Discord support -->
+  <!-- (1) Knowledge Gatherer + Discord/Workspace sources -->
   <rect x="80"  y="210" width="740" height="100" rx="14" ry="14" fill="#ffffff"/>
   <circle cx="130" cy="260" r="22" fill="#0d1b2a"/>
   <text x="130" y="267" fill="#76b900" font-size="22" font-weight="800" text-anchor="middle">1</text>
   <text x="170" y="248" fill="#0d1b2a" font-size="24" font-weight="700">Knowledge Gatherer</text>
-  <text x="170" y="278" fill="#3b556e" font-size="15">reads Discord + docs, parses staff replies into structured signal</text>
+  <text x="170" y="278" fill="#3b556e" font-size="15">reads Discord, Google Workspace, and policy docs into structured signal</text>
 
-  <rect x="200" y="330" width="500" height="76" rx="12" ry="12" fill="#152a3f" stroke="#2b4a6b" stroke-width="1.5"/>
-  <text x="450" y="362" fill="#ffffff" font-size="17" font-weight="700" text-anchor="middle">Discord channels — 10 hotel-ops channels</text>
-  <text x="450" y="388" fill="#6c829c" font-size="13" text-anchor="middle">#front-desk · #housekeeping · #maintenance · #nemotron-rag · #agent-audit-log · …</text>
+  <!-- two side-by-side source boxes: Discord + Google Workspace -->
+  <rect x="80"  y="330" width="360" height="76" rx="12" ry="12" fill="#152a3f" stroke="#2b4a6b" stroke-width="1.5"/>
+  <text x="260" y="362" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle">Discord channels</text>
+  <text x="260" y="386" fill="#9ab4d0" font-size="12" text-anchor="middle">10 hotel-ops channels</text>
 
-  <line x1="450" y1="310" x2="450" y2="328" stroke="#9ab4d0" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="460" y="330" width="360" height="76" rx="12" ry="12" fill="#152a3f" stroke="#2b4a6b" stroke-width="1.5"/>
+  <text x="640" y="362" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle">Google Workspace</text>
+  <text x="640" y="386" fill="#9ab4d0" font-size="12" text-anchor="middle">Docs · Drive · Sheets · Admin</text>
 
-  <!-- vertical down-arrow into next agent box -->
-  <line x1="450" y1="406" x2="450" y2="448" stroke="#9ab4d0" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- branched arrows from Knowledge Gatherer down into both source boxes -->
+  <line x1="260" y1="310" x2="260" y2="328" stroke="#9ab4d0" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="640" y1="310" x2="640" y2="328" stroke="#9ab4d0" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- merge arrows back up into the next stage -->
+  <line x1="260" y1="406" x2="260" y2="432" stroke="#9ab4d0" stroke-width="2"/>
+  <line x1="640" y1="406" x2="640" y2="432" stroke="#9ab4d0" stroke-width="2"/>
+  <line x1="260" y1="432" x2="640" y2="432" stroke="#9ab4d0" stroke-width="2"/>
+  <line x1="450" y1="432" x2="450" y2="448" stroke="#9ab4d0" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- (2) Replicant Updater + SQLite support -->
   <rect x="80"  y="450" width="740" height="100" rx="14" ry="14" fill="#ffffff"/>
@@ -54,12 +64,12 @@
 
   <line x1="450" y1="646" x2="450" y2="688" stroke="#9ab4d0" stroke-width="2" marker-end="url(#arrow)"/>
 
-  <!-- (3) RAG Chat + Actions + Nemotron support (green-accented) -->
+  <!-- (3) Nemotron RAG + Actions + NIM model support (green-accented) -->
   <rect x="80"  y="690" width="740" height="100" rx="14" ry="14" fill="#ffffff"/>
   <circle cx="130" cy="740" r="22" fill="#0d1b2a"/>
   <text x="130" y="747" fill="#76b900" font-size="22" font-weight="800" text-anchor="middle">3</text>
-  <text x="170" y="728" fill="#0d1b2a" font-size="24" font-weight="700">RAG Chat + Actions</text>
-  <text x="170" y="758" fill="#3b556e" font-size="15">cited Nemotron answers · draft replies · route incidents</text>
+  <text x="170" y="728" fill="#0d1b2a" font-size="24" font-weight="700">Nemotron RAG + Actions</text>
+  <text x="170" y="758" fill="#3b556e" font-size="15">retrieve cited memories → synthesize → draft replies · route incidents</text>
 
   <rect x="200" y="810" width="500" height="100" rx="12" ry="12" fill="#152a3f" stroke="#76b900" stroke-width="2.5"/>
   <text x="450" y="846" fill="#ffffff" font-size="20" font-weight="800" text-anchor="middle">
