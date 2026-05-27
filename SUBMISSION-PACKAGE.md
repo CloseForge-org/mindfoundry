@@ -35,7 +35,7 @@ The reference deployment is NeMo Lodge, a 250-room simulated hotel with 8 staff 
 
 ## GitHub Repository URL
 ```
-<TBD - inserted after gh repo create>
+https://github.com/CloseForge-org/mindfoundry
 ```
 
 ## Demo Video URL

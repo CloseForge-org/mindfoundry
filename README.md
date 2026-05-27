@@ -4,7 +4,7 @@
 
 NVIDIA Agent Hackathon entry · NeMo Lodge demo · powered by **Nemotron · NemoClaw · NVIDIA NIM · OpenClaw**.
 
-- **Repo:** `<TBD - set after gh repo create>`
+- **Repo:** https://github.com/CloseForge-org/mindfoundry
 - **Demo video:** `<TBD - update after recording>`
 - **Status:** running locally on a Mac mini, autonomous Discord ops loop active.
 
@@ -86,7 +86,7 @@ Requires **Python 3.11+** on macOS or Linux.
 
 ```bash
 # 1. Clone
-git clone <repo-url> mindfoundry
+git clone https://github.com/CloseForge-org/mindfoundry.git
 cd mindfoundry
 
 # 2. Install deps
