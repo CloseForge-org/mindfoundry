@@ -1,5 +1,9 @@
 # MindFoundry
 
+<p align="center">
+  <img src="docs/mindfoundry-preview.png" alt="MindFoundry — NemoClaw-secured long agent for the NVIDIA Agent Hackathon. Nemotron · NemoClaw · NVIDIA NIM · OpenClaw. 100% routing, policy, privacy, no-hallucination across 500 incidents." width="880">
+</p>
+
 > **NemoClaw-secured long agent that builds AI replicants of your teammates from chat, docs, and ops history — then answers operational questions on their behalf, with citations.**
 
 NVIDIA Agent Hackathon entry · NeMo Lodge demo · powered by **Nemotron · NemoClaw · NVIDIA NIM · OpenClaw**.
