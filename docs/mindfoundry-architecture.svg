@@ -112,8 +112,8 @@
   </text>
 
   <!-- Baseline eval pill (bottom-center) -->
-  <rect x="240" y="1330" width="420" height="44" rx="22" ry="22" fill="#152a3f" stroke="#76b900" stroke-width="1.5"/>
-  <text x="450" y="1359" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">
-    Baseline eval (500 incidents): <tspan fill="#76b900">100 %</tspan> routing · policy · privacy · no-hallucination
+  <rect x="180" y="1330" width="540" height="48" rx="24" ry="24" fill="#152a3f" stroke="#76b900" stroke-width="2"/>
+  <text x="450" y="1360" fill="#ffffff" font-size="15" font-weight="700" text-anchor="middle">
+    Baseline eval (500 incidents): <tspan fill="#76b900">100%</tspan> routing · policy · privacy · no-hallucination
   </text>
 </svg>
