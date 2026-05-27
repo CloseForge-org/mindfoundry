@@ -91,4 +91,7 @@ class Handler(BaseHTTPRequestHandler):
         return
 
 if __name__ == '__main__':
-    ThreadingHTTPServer(('127.0.0.1', 8765), Handler).serve_forever()
+    import os
+    port = int(os.environ.get('HOTELSIM_PORT', '8765'))
+    print(f'[hotel-sim] retrieval API on http://127.0.0.1:{port}', flush=True)
+    ThreadingHTTPServer(('127.0.0.1', port), Handler).serve_forever()

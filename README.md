@@ -97,6 +97,7 @@ pip install -r requirements.txt
 export NVIDIA_NIM_API_KEY="nvapi-..."                                  # NVIDIA NIM key
 export NVIDIA_NIM_MODEL="nvidia/llama-3.3-nemotron-super-49b-v1.5"     # Nemotron model
 export DISCORD_BOT_TOKEN="..."                                         # Optional: only if you want the Discord loop
+export HOTELSIM_PORT="8765"                                            # Optional: override if 8765 is taken on your box
 
 # 4. Generate the simulated hotel (SQLite + event stream + policies)
 python3 -m hotel_sim.generate

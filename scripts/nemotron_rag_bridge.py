@@ -39,7 +39,7 @@ from hotel_sim.live_ops import render_summary
 from hotel_sim.policy_gate import gate_text
 
 STATE = ROOT / 'reports' / 'nemotron-rag-bridge-state.json'
-LOCAL_API = 'http://127.0.0.1:8765'
+LOCAL_API = os.environ.get('HOTELSIM_API', f"http://127.0.0.1:{os.environ.get('HOTELSIM_PORT', '8765')}")
 BOT_USER_ID = None
 
 # --- NVIDIA NIM config -----------------------------------------------------
