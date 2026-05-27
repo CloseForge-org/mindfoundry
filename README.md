@@ -63,55 +63,49 @@ See [`docs/nvidia-tools-used.md`](docs/nvidia-tools-used.md) for the full mappin
 
 ## Setup
 
-Requires **Python 3.11+** on macOS or Linux.
+Requires **Python 3.11+** on macOS, Linux, or WSL2. Full quickstart in [`docs/QUICKSTART.md`](docs/QUICKSTART.md).
 
 ```bash
-# 1. Clone
 git clone https://github.com/CloseForge-org/mindfoundry.git
 cd mindfoundry
 
-# 2. Install deps
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+export NVIDIA_NIM_API_KEY="nvapi-..."   # your own NIM key, https://build.nvidia.com/
 
-# 3. Configure environment
-export NVIDIA_NIM_API_KEY="nvapi-..."                                  # NVIDIA NIM key
-export NVIDIA_NIM_MODEL="nvidia/llama-3.3-nemotron-super-49b-v1.5"     # Nemotron model
-export DISCORD_BOT_TOKEN="..."                                         # Optional: only if you want the Discord loop
-export HOTELSIM_PORT="8765"                                            # Optional: override if 8765 is taken on your box
-
-# 4. Generate the simulated hotel (SQLite + event stream + policies)
-python3 -m hotel_sim.generate
-
-# 5. Start the local retrieval API (port 8765)
-python3 api/server.py &
-
-# 6. Seed replicants from the event stream and Discord scrollback (optional)
-python3 scripts/update_replicants_from_discord.py
-
-# 7. Run the RAG bridge once (answers any new questions in #nemotron-rag)
-python3 scripts/nemotron_rag_bridge.py
-
-# 8. Open the Control Room
-open http://127.0.0.1:8765/
+make setup     # venv + deps + generate simulated hotel SQLite
+make api       # start the local retrieval API in the background
+make demo      # end-to-end walkthrough: health -> Nemotron RAG -> adversarial probe -> eval
 ```
+
+Optional overrides:
+
+```bash
+export NVIDIA_NIM_MODEL="nvidia/llama-3.3-nemotron-super-49b-v1.5"   # default
+export DISCORD_BOT_TOKEN="..."                                       # only for the live Discord loop
+export HOTELSIM_PORT="8766"                                          # if 8765 is taken on your box
+```
+
+More targets:
+
+| Target | What it does |
+| --- | --- |
+| `make help` | Show all targets |
+| `make doctor` | Print environment diagnostics (Python, venv, NIM key, port, etc.) |
+| `make smoke` | Quick Nemotron-only smoke test (no API server needed) |
+| `make eval` | Run only the 500-incident baseline evaluation |
+| `make discord` | Drip one simulated incident into the live Discord (needs `DISCORD_BOT_TOKEN`) |
+| `make stop` | Stop the background API |
+| `make clean` / `make reset` | Remove generated state / also remove venv |
 
 ### One-command demo walkthrough
 
-With the API server running and `NVIDIA_NIM_API_KEY` exported:
-
-```bash
-python3 scripts/demo_walkthrough.py
-```
-
-This runs four checks in sequence and prints a colored summary:
+`make demo` runs the same four checks in sequence and prints a colored summary:
 
 1. Health-checks the local retrieval API.
 2. Runs a real ops question through **Nemotron via NVIDIA NIM** and shows the cited answer.
 3. Runs an adversarial PII probe and shows the **NemoClaw policy gate** scrubbing the response.
 4. Prints the **baseline 500-incident evaluation** (routing / policy / privacy / no-hallucination, all 100%).
 
-A successful Nemotron-only smoke transcript also lives in [`reports/nemotron-smoke-test.json`](reports/nemotron-smoke-test.json).
+If you'd rather run the walkthrough directly: `python3 scripts/demo_walkthrough.py` (after `make setup && make api`). A successful Nemotron-only smoke transcript lives in [`reports/nemotron-smoke-test.json`](reports/nemotron-smoke-test.json).
 
 ---
 

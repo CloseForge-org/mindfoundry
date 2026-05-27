@@ -82,6 +82,14 @@ def nemotron_synthesize(question: str, retrieval: dict) -> dict:
         return deterministic('NVIDIA_NIM_DISABLE=1')
     if not NIM_API_KEY:
         return deterministic('NVIDIA_NIM_API_KEY not set')
+    # HTTP headers must be latin-1 encodable. Reject obviously corrupted keys
+    # (e.g. a pasted key with curly quotes / ellipsis from a chat redactor) up
+    # front so the failure mode is a clean message, not a UnicodeEncodeError
+    # mid-request.
+    try:
+        NIM_API_KEY.encode('latin-1')
+    except UnicodeEncodeError:
+        return deterministic('NVIDIA_NIM_API_KEY contains non-ASCII characters; check for smart quotes or ellipsis in the value')
 
     # Build a compact citation block for the LLM. Keep it small — NIM rate-limits
     # large requests and the deterministic retrieval already did the hard work.
@@ -132,18 +140,29 @@ def nemotron_synthesize(question: str, retrieval: dict) -> dict:
         },
         method='POST',
     )
-    try:
-        with urllib.request.urlopen(req, timeout=45) as resp:
-            raw = resp.read().decode('utf-8', 'replace')
-            body = json.loads(raw)
-    except urllib.error.HTTPError as e:
+    # NIM occasionally cold-starts; one quick retry on TimeoutError gives the
+    # demo a smooth first impression without hiding genuine errors.
+    last_err = None
+    for attempt in (1, 2):
         try:
-            err_body = e.read().decode('utf-8', 'replace')[:400]
-        except Exception:
-            err_body = ''
-        return deterministic(f'NIM HTTPError {e.code}: {err_body}')
-    except Exception as e:
-        return deterministic(f'NIM exception: {type(e).__name__}: {e}')
+            with urllib.request.urlopen(req, timeout=60) as resp:
+                raw = resp.read().decode('utf-8', 'replace')
+                body = json.loads(raw)
+                last_err = None
+                break
+        except urllib.error.HTTPError as e:
+            try:
+                err_body = e.read().decode('utf-8', 'replace')[:400]
+            except Exception:
+                err_body = ''
+            return deterministic(f'NIM HTTPError {e.code}: {err_body}')
+        except (TimeoutError, urllib.error.URLError) as e:
+            last_err = f'NIM transient error (attempt {attempt}): {type(e).__name__}: {e}'
+            continue
+        except Exception as e:
+            return deterministic(f'NIM exception: {type(e).__name__}: {e}')
+    if last_err:
+        return deterministic(last_err)
 
     try:
         text = body['choices'][0]['message']['content'].strip()
