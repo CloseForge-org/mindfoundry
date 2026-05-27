@@ -32,32 +32,9 @@ The reference deployment is **NeMo Lodge**, a simulation-grade fictional 250-roo
 
 ## Architecture
 
-```
-┌───────────────────────────────────────────────────────────────┐
-│                         MindFoundry                            │
-│                NemoClaw-Secured Long Agent                     │
-├───────────────────────────────────────────────────────────────┤
-│                                                                │
-│   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐      │
-│   │  Knowledge   │   │   Replicant  │   │   RAG Chat   │      │
-│   │  Gatherer    │──▶│   Updater    │──▶│   + Actions  │      │
-│   └──────────────┘   └──────────────┘   └──────────────┘      │
-│         │                   │                   │              │
-│   ┌─────▼──────┐     ┌──────▼──────┐    ┌──────▼──────┐       │
-│   │   Discord  │     │   SQLite    │    │  Nemotron   │       │
-│   │  channels  │     │  + replicant│    │  via NIM    │       │
-│   └────────────┘     │   memories  │    └─────────────┘       │
-│                      └─────────────┘                           │
-│                            │                                   │
-│   ┌────────────────────────▼────────────────────────────┐     │
-│   │             NemoClaw Policy Engine                  │     │
-│   │  filesystem · network · inference · PII redaction   │     │
-│   └─────────────────────────────────────────────────────┘     │
-│                                                                │
-│   Data surface: Google Workspace (Docs / Sheets / Drive)       │
-│   Control surface: HotelSim Control Room (localhost:8765)      │
-└───────────────────────────────────────────────────────────────┘
-```
+<p align="center">
+  <img src="docs/mindfoundry-architecture.png" alt="MindFoundry architecture: Knowledge Gatherer → Replicant Updater → RAG Chat + Actions, all gated by NemoClaw Policy Engine, reasoning by Nemotron via NVIDIA NIM" width="720">
+</p>
 
 - **Knowledge gatherer** — reads new Discord messages, parses them, scores intent.
 - **Replicant updater** — extracts durable facts per teammate and appends to their memory profile (with freshness + source).
@@ -115,20 +92,22 @@ python3 scripts/nemotron_rag_bridge.py
 open http://127.0.0.1:8765/
 ```
 
-### NVIDIA NIM smoke test
+### One-command demo walkthrough
+
+With the API server running and `NVIDIA_NIM_API_KEY` exported:
 
 ```bash
-python3 -c "
-import os, sys; sys.path.insert(0, 'scripts'); sys.path.insert(0, '.')
-import types; sys.modules['discord_utils'] = types.SimpleNamespace(channel_ids=lambda: {}, read=lambda *a,**k: [], send=lambda *a,**k: [{'id':'stub'}])
-import importlib.util
-s = importlib.util.spec_from_file_location('b', 'scripts/nemotron_rag_bridge.py')
-m = importlib.util.module_from_spec(s); s.loader.exec_module(m)
-print(m.nemotron_synthesize('hello', {'citations': [], 'recommended_route': [], 'guardrail': '', 'detected_intents': []})['used_nim'])
-"
+python3 scripts/demo_walkthrough.py
 ```
 
-Expect `True` if your `NVIDIA_NIM_API_KEY` is set. A successful end-to-end transcript lives in [`reports/nemotron-smoke-test.json`](reports/nemotron-smoke-test.json).
+This runs four checks in sequence and prints a colored summary:
+
+1. Health-checks the local retrieval API.
+2. Runs a real ops question through **Nemotron via NVIDIA NIM** and shows the cited answer.
+3. Runs an adversarial PII probe and shows the **NemoClaw policy gate** scrubbing the response.
+4. Prints the **baseline 500-incident evaluation** (routing / policy / privacy / no-hallucination, all 100%).
+
+A successful Nemotron-only smoke transcript also lives in [`reports/nemotron-smoke-test.json`](reports/nemotron-smoke-test.json).
 
 ---
 

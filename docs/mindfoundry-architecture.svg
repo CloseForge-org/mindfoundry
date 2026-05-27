@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1400" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9ab4d0"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#76b900"/>
+    </marker>
+  </defs>
+
+  <!-- background -->
+  <rect width="900" height="1400" fill="#0d1b2a"/>
+
+  <!-- title block -->
+  <text x="450" y="68" fill="#ffffff" font-size="36" font-weight="800" text-anchor="middle">MindFoundry</text>
+  <text x="450" y="100" fill="#9ab4d0" font-size="18" font-weight="500" text-anchor="middle">NemoClaw-Secured Long Agent</text>
+  <line x1="100" y1="118" x2="800" y2="118" stroke="#ffffff" stroke-opacity="0.18"/>
+
+  <!-- outer container -->
+  <rect x="60" y="150" width="780" height="1080" rx="22" ry="22"
+        fill="none" stroke="#ffffff" stroke-opacity="0.18" stroke-width="2"/>
+
+  <!-- Section label: AGENT LOOP -->
+  <text x="80" y="190" fill="#76b900" font-size="13" font-weight="700" letter-spacing="2">AGENT LOOP</text>
+
+  <!-- (1) Knowledge Gatherer + Discord support -->
+  <rect x="80"  y="210" width="740" height="100" rx="14" ry="14" fill="#ffffff"/>
+  <circle cx="130" cy="260" r="22" fill="#0d1b2a"/>
+  <text x="130" y="267" fill="#76b900" font-size="22" font-weight="800" text-anchor="middle">1</text>
+  <text x="170" y="248" fill="#0d1b2a" font-size="24" font-weight="700">Knowledge Gatherer</text>
+  <text x="170" y="278" fill="#3b556e" font-size="15">reads Discord + docs, parses staff replies into structured signal</text>
+
+  <rect x="200" y="330" width="500" height="76" rx="12" ry="12" fill="#152a3f" stroke="#2b4a6b" stroke-width="1.5"/>
+  <text x="450" y="362" fill="#ffffff" font-size="17" font-weight="700" text-anchor="middle">Discord channels — 10 hotel-ops channels</text>
+  <text x="450" y="388" fill="#6c829c" font-size="13" text-anchor="middle">#front-desk · #housekeeping · #maintenance · #nemotron-rag · #agent-audit-log · …</text>
+
+  <line x1="450" y1="310" x2="450" y2="328" stroke="#9ab4d0" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- vertical down-arrow into next agent box -->
+  <line x1="450" y1="406" x2="450" y2="448" stroke="#9ab4d0" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- (2) Replicant Updater + SQLite support -->
+  <rect x="80"  y="450" width="740" height="100" rx="14" ry="14" fill="#ffffff"/>
+  <circle cx="130" cy="500" r="22" fill="#0d1b2a"/>
+  <text x="130" y="507" fill="#76b900" font-size="22" font-weight="800" text-anchor="middle">2</text>
+  <text x="170" y="488" fill="#0d1b2a" font-size="24" font-weight="700">Replicant Updater</text>
+  <text x="170" y="518" fill="#3b556e" font-size="15">extracts durable memory per teammate, with source + freshness</text>
+
+  <rect x="200" y="570" width="500" height="76" rx="12" ry="12" fill="#152a3f" stroke="#2b4a6b" stroke-width="1.5"/>
+  <text x="450" y="602" fill="#ffffff" font-size="17" font-weight="700" text-anchor="middle">SQLite + replicant memory</text>
+  <text x="450" y="628" fill="#6c829c" font-size="13" text-anchor="middle">8 staff · 68 memories · confidence + freshness scoring</text>
+
+  <line x1="450" y1="550" x2="450" y2="568" stroke="#9ab4d0" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <line x1="450" y1="646" x2="450" y2="688" stroke="#9ab4d0" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- (3) RAG Chat + Actions + Nemotron support (green-accented) -->
+  <rect x="80"  y="690" width="740" height="100" rx="14" ry="14" fill="#ffffff"/>
+  <circle cx="130" cy="740" r="22" fill="#0d1b2a"/>
+  <text x="130" y="747" fill="#76b900" font-size="22" font-weight="800" text-anchor="middle">3</text>
+  <text x="170" y="728" fill="#0d1b2a" font-size="24" font-weight="700">RAG Chat + Actions</text>
+  <text x="170" y="758" fill="#3b556e" font-size="15">cited Nemotron answers · draft replies · route incidents</text>
+
+  <rect x="200" y="810" width="500" height="100" rx="12" ry="12" fill="#152a3f" stroke="#76b900" stroke-width="2.5"/>
+  <text x="450" y="846" fill="#ffffff" font-size="20" font-weight="800" text-anchor="middle">
+    Nemotron via <tspan fill="#76b900">NVIDIA NIM</tspan>
+  </text>
+  <text x="450" y="874" fill="#9ab4d0" font-size="13" text-anchor="middle">nvidia/llama-3.3-nemotron-super-49b-v1.5</text>
+  <text x="450" y="894" fill="#6c829c" font-size="12" text-anchor="middle">OpenAI-compatible chat completions</text>
+
+  <line x1="450" y1="790" x2="450" y2="808" stroke="#76b900" stroke-width="2.5" marker-end="url(#arrow-green)"/>
+
+  <!-- arrow from RAG output down into NemoClaw bar -->
+  <line x1="450" y1="910" x2="450" y2="970" stroke="#76b900" stroke-width="2.5" marker-end="url(#arrow-green)"/>
+
+  <!-- Section label: SECURITY -->
+  <text x="80" y="958" fill="#76b900" font-size="13" font-weight="700" letter-spacing="2">SECURITY GATE</text>
+
+  <!-- NemoClaw policy bar (full width) -->
+  <rect x="80" y="980" width="740" height="140" rx="16" ry="16" fill="#76b900"/>
+  <text x="450" y="1024" fill="#0d1b2a" font-size="26" font-weight="900" text-anchor="middle">NemoClaw Policy Engine</text>
+  <text x="450" y="1058" fill="#0d1b2a" font-size="16" font-weight="700" text-anchor="middle">
+    filesystem  ·  network  ·  inference  ·  PII redaction
+  </text>
+  <text x="450" y="1090" fill="#0d1b2a" font-size="13" font-weight="500" text-anchor="middle" opacity="0.85">
+    every outbound message policy-gated · every decision audited
+  </text>
+
+  <!-- Surfaces footer (inside container, bottom) -->
+  <line x1="100" y1="1160" x2="800" y2="1160" stroke="#ffffff" stroke-opacity="0.10"/>
+  <text x="450" y="1188" fill="#9ab4d0" font-size="13" text-anchor="middle">
+    Data surface: <tspan fill="#ffffff" font-weight="700">Google Workspace</tspan>
+    &#160;&#160;·&#160;&#160;
+    Control surface: <tspan fill="#ffffff" font-weight="700">HotelSim Control Room</tspan> (localhost:8765)
+  </text>
+  <text x="450" y="1212" fill="#6c829c" font-size="12" text-anchor="middle">
+    runs as a persistent OpenClaw agent · cron: drip 15min · RAG 2min · replicant updater 5min
+  </text>
+
+  <!-- branding strip below container -->
+  <text x="60"  y="1280" fill="#6c829c" font-size="13">
+    MindFoundry  ·  NVIDIA Agent Hackathon
+  </text>
+  <text x="60"  y="1304" fill="#6c829c" font-size="12">
+    github.com/CloseForge-org/mindfoundry
+  </text>
+  <text x="840" y="1280" fill="#76b900" font-size="13" font-weight="800" text-anchor="end">
+    NVIDIA stack
+  </text>
+  <text x="840" y="1304" fill="#9ab4d0" font-size="12" text-anchor="end">
+    Nemotron  ·  NemoClaw  ·  NIM  ·  OpenClaw
+  </text>
+
+  <!-- Baseline eval pill (bottom-center) -->
+  <rect x="240" y="1330" width="420" height="44" rx="22" ry="22" fill="#152a3f" stroke="#76b900" stroke-width="1.5"/>
+  <text x="450" y="1359" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">
+    Baseline eval (500 incidents): <tspan fill="#76b900">100 %</tspan> routing · policy · privacy · no-hallucination
+  </text>
+</svg>
