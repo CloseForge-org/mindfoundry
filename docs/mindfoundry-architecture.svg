@@ -111,9 +111,9 @@
     Nemotron  ·  NemoClaw  ·  NIM  ·  OpenClaw
   </text>
 
-  <!-- Baseline eval pill (bottom-center) -->
-  <rect x="180" y="1330" width="540" height="48" rx="24" ry="24" fill="#152a3f" stroke="#76b900" stroke-width="2"/>
-  <text x="450" y="1360" fill="#ffffff" font-size="15" font-weight="700" text-anchor="middle">
-    Baseline eval (500 incidents): <tspan fill="#76b900">100%</tspan> routing · policy · privacy · no-hallucination
+  <!-- Baseline eval pill (bottom-center, solid green badge) -->
+  <rect x="150" y="1330" width="600" height="50" rx="25" ry="25" fill="#76b900"/>
+  <text x="450" y="1362" fill="#0d1b2a" font-size="15" font-weight="800" text-anchor="middle">
+    Baseline eval (500 incidents) — 100% routing · policy · privacy · no-hallucination
   </text>
 </svg>
